@@ -1,4 +1,3 @@
-[0.001s][warning][perf,memops] Cannot use file /tmp/hsperfdata_ved/204865 because it is locked by another process (errno = 11)
     .text
     .globl main
 main:

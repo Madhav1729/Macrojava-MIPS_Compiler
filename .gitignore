@@ -14,3 +14,7 @@
 *.class
 *.jar
 .vscode/
+
+# mjc build tree (make)
+/build/
+!/tests/*.sh

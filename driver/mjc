@@ -1,0 +1,23 @@
+#!/bin/sh
+
+self=$0
+while [ -L "$self" ]; do
+    link=$(readlink "$self")
+    case $link in
+        /*) self=$link ;;
+        *) self=$(dirname "$self")/$link ;;
+    esac
+done
+MJC_HOME=$(cd "$(dirname "$self")/.." && pwd)
+
+if [ -n "$JAVA_HOME" ]; then
+    java=$JAVA_HOME/bin/java
+else
+    java=java
+fi
+
+if [ -t 2 ]; then color=1; else color=0; fi
+
+exec "$java" -XX:TieredStopAtLevel=1 -XX:+UseSerialGC -XX:-UsePerfData $MJC_JAVA_OPTS \
+    -Dmjc.home="$MJC_HOME" -Dmjc.color="$color" \
+    -jar "$MJC_HOME/lib/mjc/mjc.jar" "$@"
