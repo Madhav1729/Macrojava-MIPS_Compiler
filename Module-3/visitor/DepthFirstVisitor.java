@@ -279,6 +279,7 @@ public class DepthFirstVisitor implements Visitor {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public void visit(Statement n) {
       n.f0.accept(this);
@@ -385,6 +386,23 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public void visit(FieldAssignmentStatement n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+      n.f4.accept(this);
+      n.f5.accept(this);
+   }
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -412,10 +430,22 @@ public class DepthFirstVisitor implements Visitor {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public void visit(Expression n) {
       n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public void visit(FieldRead n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
    }
 
    /**

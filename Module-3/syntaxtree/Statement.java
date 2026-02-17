@@ -12,6 +12,7 @@ package syntaxtree;
  *       | IfStatement()
  *       | WhileStatement()
  *       | PrintStatement()
+ *       | FieldAssignmentStatement()
  */
 public class Statement implements Node {
    public NodeChoice f0;

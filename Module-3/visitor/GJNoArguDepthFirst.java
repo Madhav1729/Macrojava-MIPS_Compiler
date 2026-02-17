@@ -508,6 +508,32 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public R visit(FieldAssignmentStatement n) {
+      n.f0.accept(this);
+      n.f2.accept(this);
+      n.f4.accept(this);
+      return null;
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public R visit(FieldRead n) {
+      n.f0.accept(this);
+      n.f2.accept(this);
+      return null;
+   }
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()

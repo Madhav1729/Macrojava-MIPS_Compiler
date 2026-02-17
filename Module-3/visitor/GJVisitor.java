@@ -175,6 +175,7 @@ public interface GJVisitor<R,A> {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public R visit(Statement n, A argu);
 
@@ -240,6 +241,16 @@ public interface GJVisitor<R,A> {
    public R visit(WhileStatement n, A argu);
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public R visit(FieldAssignmentStatement n, A argu);
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -261,9 +272,17 @@ public interface GJVisitor<R,A> {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public R visit(Expression n, A argu);
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public R visit(FieldRead n, A argu);
 
    /**
     * f0 -> "("

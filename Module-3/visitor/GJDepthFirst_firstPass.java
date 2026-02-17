@@ -477,6 +477,32 @@ public class GJDepthFirst_firstPass<R,A> implements GJVisitor<R,A> {
    }
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public R visit(FieldAssignmentStatement n, A argu) {
+      n.f0.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f4.accept(this, argu);
+      return null;
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public R visit(FieldRead n, A argu) {
+      n.f0.accept(this, argu);
+      n.f2.accept(this, argu);
+      return null;
+   }
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()

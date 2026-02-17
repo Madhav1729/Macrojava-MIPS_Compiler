@@ -175,6 +175,7 @@ public interface GJVoidVisitor<A> {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public void visit(Statement n, A argu);
 
@@ -240,6 +241,16 @@ public interface GJVoidVisitor<A> {
    public void visit(WhileStatement n, A argu);
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public void visit(FieldAssignmentStatement n, A argu);
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -261,9 +272,17 @@ public interface GJVoidVisitor<A> {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public void visit(Expression n, A argu);
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public void visit(FieldRead n, A argu);
 
    /**
     * f0 -> "("

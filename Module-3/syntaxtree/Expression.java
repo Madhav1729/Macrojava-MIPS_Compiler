@@ -18,6 +18,7 @@ package syntaxtree;
  *       | ArrayLength()
  *       | MessageSend()
  *       | LambdaExpression()
+ *       | FieldRead()
  *       | PrimaryExpression()
  */
 public class Expression implements Node {

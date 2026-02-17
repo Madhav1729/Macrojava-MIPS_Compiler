@@ -289,6 +289,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public void visit(Statement n, A argu) {
       n.f0.accept(this, argu);
@@ -395,6 +396,23 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public void visit(FieldAssignmentStatement n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+      n.f4.accept(this, argu);
+      n.f5.accept(this, argu);
+   }
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -422,10 +440,22 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public void visit(Expression n, A argu) {
       n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public void visit(FieldRead n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
    }
 
    /**

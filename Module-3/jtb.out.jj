@@ -541,6 +541,7 @@ Statement Statement() :
    IfStatement n4;
    WhileStatement n5;
    PrintStatement n6;
+   FieldAssignmentStatement n7;
 
    
 }
@@ -565,6 +566,10 @@ Statement Statement() :
    |
       n6=PrintStatement()
       { n0 = new NodeChoice(n6, 5); }
+   |
+      LOOKAHEAD(2)
+      n7=FieldAssignmentStatement()
+      { n0 = new NodeChoice(n7, 6); }
    )
    
    { return new Statement(n0); }
@@ -736,6 +741,31 @@ WhileStatement WhileStatement() :
    { return new WhileStatement(n0,n2,n4,n5,n7); }
 }
 
+FieldAssignmentStatement FieldAssignmentStatement() :
+{
+   Identifier n0;
+   NodeToken n1;
+   Token n2;
+   Identifier n3;
+   NodeToken n4;
+   Token n5;
+   Expression n6;
+   NodeToken n7;
+   Token n8;
+
+   
+}
+{
+   n0=Identifier()
+   n2="." { n1 = JTBToolkit.makeNodeToken(n2); }
+   n3=Identifier()
+   n5="=" { n4 = JTBToolkit.makeNodeToken(n5); }
+   n6=Expression()
+   n8=";" { n7 = JTBToolkit.makeNodeToken(n8); }
+   
+   { return new FieldAssignmentStatement(n0,n1,n3,n4,n6,n7); }
+}
+
 PrintStatement PrintStatement() :
 {
    NodeToken n0;
@@ -775,7 +805,8 @@ Expression Expression() :
    ArrayLength n10;
    MessageSend n11;
    LambdaExpression n12;
-   PrimaryExpression n13;
+   FieldRead n13;
+   PrimaryExpression n14;
 
    
 }
@@ -829,11 +860,32 @@ Expression Expression() :
       n12=LambdaExpression()
       { n0 = new NodeChoice(n12, 11); }
    |
-      n13=PrimaryExpression()
+      LOOKAHEAD(Identifier() "." Identifier())
+      n13=FieldRead()
       { n0 = new NodeChoice(n13, 12); }
+   |
+      n14=PrimaryExpression()
+      { n0 = new NodeChoice(n14, 13); }
    )
    
    { return new Expression(n0); }
+}
+
+FieldRead FieldRead() :
+{
+   Identifier n0;
+   NodeToken n1;
+   Token n2;
+   Identifier n3;
+
+   
+}
+{
+   n0=Identifier()
+   n2="." { n1 = JTBToolkit.makeNodeToken(n2); }
+   n3=Identifier()
+   
+   { return new FieldRead(n0,n1,n3); }
 }
 
 LambdaExpression LambdaExpression() :

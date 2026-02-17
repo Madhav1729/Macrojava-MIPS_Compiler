@@ -726,6 +726,69 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       return _ret;
    }
 
+   // Value of a local or field identifier; sets return_typ to its type.
+   String load_identifier(String id) {
+      if (curr_method_vars.containsKey(id)) {
+         return_typ = curr_method_vars_with_types.get(id);
+         return "TEMP " + curr_method_vars.get(id);
+      }
+      int temp = find_class_vars(id);
+      int t1 = get_free_temp();
+      println(curr_tab_space() + "HLOAD TEMP " + t1 + " TEMP 0 " + (temp * 4));
+      return_typ = get_var_type(id);
+      return "TEMP " + t1;
+   }
+
+   // Slot of field id in class cls.
+   int field_slot(String cls, String id) {
+      HashMap<String, Integer> var_map = class_var_map.get(cls);
+      for (String node = cls; node != null && !node.equals(no_parent); node = parent.get(node)) {
+         Integer slot = var_map.get(node + mid_name + id);
+         if (slot != null) return slot;
+      }
+      throw new IllegalStateException("no field " + id + " in class " + cls);
+   }
+
+   String field_type(String cls, String id) {
+      for (String node = cls; node != null && !node.equals(no_parent); node = parent.get(node)) {
+         HashMap<String, String> vars = class_vars.get(node);
+         if (vars != null && vars.containsKey(id)) return vars.get(id);
+      }
+      return null;
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public R visit(FieldAssignmentStatement n, A argu) {
+      String obj = load_identifier((String) n.f0.accept(this, argu));
+      String cls = return_typ;
+      String field = (String) n.f2.accept(this, argu);
+      String exp = (String) n.f4.accept(this, argu);
+      println(curr_tab_space() + "HSTORE " + obj + " " + (field_slot(cls, field) * 4) + " " + exp);
+      return null;
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public R visit(FieldRead n, A argu) {
+      String obj = load_identifier((String) n.f0.accept(this, argu));
+      String cls = return_typ;
+      String field = (String) n.f2.accept(this, argu);
+      int t1 = get_free_temp();
+      println(curr_tab_space() + "HLOAD TEMP " + t1 + " " + obj + " " + (field_slot(cls, field) * 4));
+      return_typ = field_type(cls, field);
+      return (R) ("TEMP " + t1);
+   }
+
    /**
     * f0 -> "println"
     * f1 -> "("

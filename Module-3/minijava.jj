@@ -264,6 +264,9 @@ void Statement() :
   WhileStatement()
 |
   PrintStatement()
+|
+  LOOKAHEAD(2)
+  FieldAssignmentStatement()
 }
 
 void Block() :
@@ -305,6 +308,13 @@ void WhileStatement() :
 {}
 {
   "while" "(" Expression() ")" Statement() 
+}
+
+// obj.f = e;  (internal: emitted by the optimizer, not part of user MiniJava)
+void FieldAssignmentStatement() :
+{}
+{
+  Identifier() "." Identifier() "=" Expression() ";"
 }
 
 void PrintStatement() :
@@ -351,8 +361,18 @@ void Expression() :
 | 
   LOOKAHEAD("(" Identifier() ")" "->" )
   LambdaExpression()
+|
+  LOOKAHEAD( Identifier() "." Identifier() )
+  FieldRead()
 | 
   PrimaryExpression()
+}
+
+// obj.f  (internal: emitted by the optimizer, not part of user MiniJava)
+void FieldRead() :
+{}
+{
+  Identifier() "." Identifier()
 }
 
 void LambdaExpression() :

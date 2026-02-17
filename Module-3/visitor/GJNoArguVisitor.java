@@ -175,6 +175,7 @@ public interface GJNoArguVisitor<R> {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public R visit(Statement n);
 
@@ -240,6 +241,16 @@ public interface GJNoArguVisitor<R> {
    public R visit(WhileStatement n);
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public R visit(FieldAssignmentStatement n);
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -261,9 +272,17 @@ public interface GJNoArguVisitor<R> {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public R visit(Expression n);
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public R visit(FieldRead n);
 
    /**
     * f0 -> "("

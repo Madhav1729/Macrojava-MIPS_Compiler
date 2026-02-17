@@ -175,6 +175,7 @@ public interface Visitor {
     *       | IfStatement()
     *       | WhileStatement()
     *       | PrintStatement()
+    *       | FieldAssignmentStatement()
     */
    public void visit(Statement n);
 
@@ -240,6 +241,16 @@ public interface Visitor {
    public void visit(WhileStatement n);
 
    /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "="
+    * f4 -> Expression()
+    * f5 -> ";"
+    */
+   public void visit(FieldAssignmentStatement n);
+
+   /**
     * f0 -> "System.out.println"
     * f1 -> "("
     * f2 -> Expression()
@@ -261,9 +272,17 @@ public interface Visitor {
     *       | ArrayLength()
     *       | MessageSend()
     *       | LambdaExpression()
+    *       | FieldRead()
     *       | PrimaryExpression()
     */
    public void visit(Expression n);
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> "."
+    * f2 -> Identifier()
+    */
+   public void visit(FieldRead n);
 
    /**
     * f0 -> "("
