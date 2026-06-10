@@ -13,6 +13,11 @@ final class Diag {
         System.err.println(where + " " + style("1;31", "error:") + " " + message);
     }
 
+    static void warning(String file, String message) {
+        String where = file != null ? style("1", file + ":") : "mjc:";
+        System.err.println(where + " " + style("1;35", "warning:") + " " + message);
+    }
+
     static void note(String message) {
         System.err.println("  " + style("1;36", "note:") + " " + message);
     }

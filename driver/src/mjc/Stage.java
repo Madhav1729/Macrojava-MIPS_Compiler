@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 enum Stage {
     MINIJAVA("minijava", ".minijava", null, null, "macro expansion   (MacroJava -> MiniJava)"),
+    TAC("tac", ".tac", "p8.jar", "P8", "three-address code (MiniJava -> TAC)"),
+    OPT("opt", ".opt", "p9.jar", "P9", "constant propagation and dead code (TAC)"),
     MINIIR("miniir", ".miniir", "p3.jar", "P3", "lowering          (MiniJava  -> MiniIR)"),
     MICROIR("microir", ".microir", "p4.jar", "P4", "flattening        (MiniIR    -> MicroIR)"),
     MINIRA("minira", ".minira", "p5.jar", "P5", "register alloc    (MicroIR   -> MiniRA)"),

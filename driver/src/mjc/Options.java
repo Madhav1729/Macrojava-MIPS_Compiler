@@ -10,10 +10,17 @@ final class Options {
               -o <file>          Write the output to <file> ('-' for standard output)
               --emit=<stage>     Stop after <stage> and write its output:
                                    minijava   MiniJava  (macros expanded)
+                                   tac        three-address MiniJava (needs -O1 or -O2)
+                                   opt        optimized MiniJava     (needs -O1 or -O2)
                                    miniir     MiniIR    (classes and methods lowered)
                                    microir    MicroIR   (expressions flattened)
                                    minira     MiniRA    (registers allocated)
                                    asm        MIPS assembly (default)
+              -O0                No optimization (default)
+              -O1, -O            Constant propagation and dead-code elimination
+              -O2                -O1 plus inlining of monomorphic calls
+              -finline-limit=<n> Inline only methods of at most <n> statements (default 20)
+              -Wno-uninitialized Do not warn about locals read before assignment
               --typecheck-only   Only check the program for errors; write nothing
               --run              Compile, then run the program in SPIM
               --save-temps       Also write every intermediate representation
@@ -39,11 +46,15 @@ final class Options {
               mjc Factorial.java --run                compiles and runs the program
               mjc Factorial.java --emit=miniir -o -   prints the MiniIR
               mjc Factorial.java --save-temps -v      keeps every stage, shows timings
+              mjc Factorial.java -O2 --emit=opt -o -  prints the optimized MiniJava
             """;
 
     String input;
     String output;
     Stage emit = Stage.ASM;
+    int optLevel = 0;
+    int inlineLimit = 20;
+    boolean warnUninitialized = true;
     boolean typecheckOnly;
     boolean run;
     boolean saveTemps;
@@ -65,11 +76,20 @@ final class Options {
                 case "--save-temps" -> o.saveTemps = true;
                 case "--typecheck-only", "-fsyntax-only" -> o.typecheckOnly = true;
                 case "-o" -> o.output = value(args, ++i, a);
+                case "-O0" -> o.optLevel = 0;
+                case "-O", "-O1" -> o.optLevel = 1;
+                case "-O2" -> o.optLevel = 2;
+                case "-Wno-uninitialized" -> o.warnUninitialized = false;
+                case "-Wuninitialized" -> o.warnUninitialized = true;
                 case "--emit" -> o.emit = Stage.byName(value(args, ++i, a));
                 case "-" -> o.setInput(a);
                 default -> {
                     if (a.startsWith("--emit=")) {
                         o.emit = Stage.byName(a.substring("--emit=".length()));
+                    } else if (a.startsWith("-finline-limit=")) {
+                        o.inlineLimit = count(a.substring("-finline-limit=".length()), a);
+                    } else if (a.matches("-O[0-9]+")) {
+                        throw MjcException.usage("unsupported optimization level '" + a + "' (use -O0, -O1 or -O2)");
                     } else if (a.startsWith("-o") && a.length() > 2) {
                         o.output = a.substring(2);
                     } else if (a.startsWith("-")) {
@@ -96,6 +116,9 @@ final class Options {
         if (o.run && o.typecheckOnly) {
             throw MjcException.usage("--run cannot be combined with --typecheck-only");
         }
+        if ((o.emit == Stage.TAC || o.emit == Stage.OPT) && o.optLevel == 0) {
+            throw MjcException.usage("--emit=" + o.emit.cliName + " needs -O1 or -O2");
+        }
         if (o.typecheckOnly && o.emit != Stage.ASM) {
             throw MjcException.usage("--typecheck-only cannot be combined with --emit");
         }
@@ -107,6 +130,15 @@ final class Options {
             throw MjcException.usage("only one input file is supported (got '" + input + "' and '" + file + "')");
         }
         input = file;
+    }
+
+    private static int count(String s, String option) throws MjcException {
+        try {
+            int n = Integer.parseInt(s);
+            if (n >= 0) return n;
+        } catch (NumberFormatException ignored) {
+        }
+        throw MjcException.usage("option '" + option + "' needs a non-negative number");
     }
 
     private static String value(String[] args, int i, String option) throws MjcException {

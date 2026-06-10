@@ -31,6 +31,9 @@ final class Toolchain {
         Toolchain tc = new Toolchain(home.toAbsolutePath().normalize());
         tc.require(tc.preprocessor());
         tc.require(tc.typeChecker());
+        tc.require(tc.uninitChecker());
+        tc.require(tc.inliner());
+        tc.require(tc.refolder());
         for (Stage s : Stage.values()) {
             if (s.passJar != null) {
                 tc.require(tc.passJar(s.passJar));
@@ -45,6 +48,18 @@ final class Toolchain {
 
     Path typeChecker() {
         return passJar("p2.jar");
+    }
+
+    Path uninitChecker() {
+        return passJar("p7.jar");
+    }
+
+    Path inliner() {
+        return passJar("p10.jar");
+    }
+
+    Path refolder() {
+        return passJar("p11.jar");
     }
 
     Path passJar(String name) {

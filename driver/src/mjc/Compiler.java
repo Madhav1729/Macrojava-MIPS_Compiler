@@ -51,11 +51,31 @@ final class Compiler {
             typecheck(minijava);
             return null;
         });
+        if (opt.warnUninitialized) {
+            timed("uninitialized-variable check", () -> {
+                warnUninitialized(minijava);
+                return null;
+            });
+        }
         if (opt.typecheckOnly) {
             return 0;
         }
 
         String program = minijava;
+        if (opt.optLevel >= 1) {
+            program = timed(Stage.TAC.description, () -> runPass(Stage.TAC, minijava));
+            if (opt.emit == Stage.TAC) {
+                writeResult(Stage.TAC, program);
+                return 0;
+            }
+            saveTemp(Stage.TAC, program);
+            program = optimize(program);
+            if (opt.emit == Stage.OPT) {
+                writeResult(Stage.OPT, program);
+                return 0;
+            }
+            saveTemp(Stage.OPT, program);
+        }
         for (Stage stage : JAVA_STAGES) {
             String input = program;
             program = timed(stage.description, () -> runPass(stage, input));
@@ -122,11 +142,44 @@ final class Compiler {
                 "the type checker exited with status " + r.exitCode() + ": " + firstLine(out), null);
     }
 
+    // -O1: P9; -O2: P9, P10, P9. Then P11.
+    private String optimize(String tac) throws MjcException {
+        String program = timed(Stage.OPT.description, () -> runPass(Stage.OPT, tac));
+        if (opt.optLevel >= 2) {
+            String before = program;
+            String inlined = timed("inlining          (TAC)", () -> runPass(tc.inliner(), "P10",
+                    "inlining", before, "--inline-limit=" + opt.inlineLimit));
+            program = timed(Stage.OPT.description, () -> runPass(Stage.OPT, inlined));
+        }
+        String folded = program;
+        return timed("temp folding      (TAC -> MiniJava)", () -> runPass(tc.refolder(), "P11",
+                "temp folding", folded));
+    }
+
+    private void warnUninitialized(String minijava) throws MjcException {
+        String out = runPass(tc.uninitChecker(), "P7", "uninitialized-variable check", minijava, new String[0], true);
+        for (String line : out.split("\\R")) {
+            if (!line.isBlank()) {
+                Diag.warning(displayName, line.strip());
+            }
+        }
+    }
+
     private String runPass(Stage stage, String input) throws MjcException {
-        String passName = stage.passMain + " (" + stage.description.replaceAll("\\s+", " ") + ")";
+        return runPass(tc.passJar(stage.passJar), stage.passMain, stage.description, input);
+    }
+
+    private String runPass(java.nio.file.Path jar, String main, String description, String input, String... args)
+            throws MjcException {
+        return runPass(jar, main, description, input, args, false);
+    }
+
+    private String runPass(java.nio.file.Path jar, String main, String description, String input,
+                           String[] args, boolean emptyOk) throws MjcException {
+        String passName = main + " (" + description.replaceAll("\\s+", " ") + ")";
         String out;
         try {
-            out = PassRunner.runInProcess(tc.passJar(stage.passJar), stage.passMain, input);
+            out = PassRunner.runInProcess(jar, main, input, args);
         } catch (Exception e) {
             Throwable cause = e instanceof PassRunner.PassCrash ? e.getCause() : e;
             throw MjcException.internal(displayName, "pass " + passName + " crashed: " + cause, cause);
@@ -135,13 +188,16 @@ final class Compiler {
         if (failure != null) {
             throw MjcException.internal(displayName, "pass " + passName + " failed: " + failure, null);
         }
-        if (out.isBlank()) {
+        if (out.isBlank() && !emptyOk) {
             throw MjcException.internal(displayName, "pass " + passName + " produced no output", null);
         }
         return out;
     }
 
     private static String failureIn(String out) {
+        if (out.isBlank()) {
+            return null;
+        }
         String[] lines = out.strip().split("\\R");
         for (String line : new String[] {lines[0], lines[lines.length - 1]}) {
             if (PASS_FAILURE.matcher(line.strip()).matches()) {

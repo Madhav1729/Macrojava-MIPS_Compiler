@@ -18,9 +18,15 @@ PP       := $(BUILD)/libexec/mjc/mjc-pp
 DRIVER   := $(LIBDIR)/mjc.jar
 LAUNCHER := $(BUILD)/bin/mjc
 
-PASSES     := 2 3 4 5 6
+PASSES     := 2 3 4 5 6 7 8 9 10 11
 PASS_JARS  := $(foreach n,$(PASSES),$(PASSDIR)/p$(n).jar)
 DRIVER_SRC := $(wildcard driver/src/mjc/*.java)
+
+# The optimizer passes (7-11) share one MiniJava front end.
+OPT_COMMON := Module-opt-common
+OPT_PASSES := 7 8 9 10 11
+pass_src    = Module-$(1)$(if $(filter $(1),$(OPT_PASSES)),:$(OPT_COMMON))
+pass_deps   = $(shell find Module-$(1) $(if $(filter $(1),$(OPT_PASSES)),$(OPT_COMMON)) -name '*.java')
 
 .PHONY: all test install uninstall clean
 
@@ -38,10 +44,10 @@ $(PP): $(OBJ)/p1/P1.lex.c $(OBJ)/p1/P1.tab.c
 	$(CXX) $(CXXFLAGS) -I$(OBJ)/p1 -o $@ $^
 
 define java_pass
-$(PASSDIR)/p$(1).jar: $(shell find Module-$(1) -name '*.java')
+$(PASSDIR)/p$(1).jar: $(call pass_deps,$(1))
 	@rm -rf $(OBJ)/p$(1)
 	@mkdir -p $(OBJ)/p$(1) $$(@D)
-	$(JAVAC) $(JAVACFLAGS) -d $(OBJ)/p$(1) -sourcepath Module-$(1) Module-$(1)/P$(1).java
+	$(JAVAC) $(JAVACFLAGS) -d $(OBJ)/p$(1) -sourcepath $(call pass_src,$(1)) Module-$(1)/P$(1).java
 	$(JAR) --create --file $$@ -C $(OBJ)/p$(1) .
 endef
 $(foreach n,$(PASSES),$(eval $(call java_pass,$(n))))

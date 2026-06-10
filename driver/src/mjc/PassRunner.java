@@ -26,7 +26,12 @@ final class PassRunner {
 
     // A fresh class loader per run: the passes share class names, and their JavaCC
     // parsers are static and can only be constructed once.
-    static synchronized String runInProcess(Path jar, String mainClass, String input) throws Exception {
+    static String runInProcess(Path jar, String mainClass, String input) throws Exception {
+        return runInProcess(jar, mainClass, input, new String[0]);
+    }
+
+    static synchronized String runInProcess(Path jar, String mainClass, String input, String[] args)
+            throws Exception {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         Throwable[] failure = new Throwable[1];
 
@@ -40,7 +45,7 @@ final class PassRunner {
             Thread thread = new Thread(null, () -> {
                 try {
                     Method main = loader.loadClass(mainClass).getMethod("main", String[].class);
-                    main.invoke(null, (Object) new String[0]);
+                    main.invoke(null, (Object) args);
                 } catch (InvocationTargetException e) {
                     failure[0] = e.getCause();
                 } catch (Throwable e) {
