@@ -604,7 +604,7 @@ Element_ved_Compare:
     sw $fp, -4($sp)
     sw $ra, -8($sp)
     move $fp, $sp
-    subu $sp, $sp, 176
+    subu $sp, $sp, 152
     sw $s0, 84($sp)
     sw $s1, 80($sp)
     sw $s2, 76($sp)
@@ -613,94 +613,78 @@ Element_ved_Compare:
     sw $s5, 64($sp)
     sw $s6, 60($sp)
     sw $s7, 56($sp)
-    sw $a1, 132($sp)
+    sw $a1, 108($sp)
     move $s1, $a2
     li $t9, 0
     move $s4, $t9
     move $v1, $s4
-    sw $v1, 156($sp)
+    sw $v1, 132($sp)
     li $s2, 1
     move $s5, $s2
     add $t8, $s1, $s5
     move $s6, $t8
-    move $v1, $s6
-    sw $v1, 124($sp)
-    lw $v0, 132($sp)
+    move $s3, $s6
+    lw $v0, 108($sp)
     sle $t7, $v0, $s1
     move $s7, $t7
-    lw $v0, 132($sp)
+    move $t0, $s7
+    beqz $t0 L_ved11
+    lw $v0, 108($sp)
     sne $t6, $v0, $s1
-    move $t0, $t6
-    add $t5, $s7, $t0
-    li $t4, 2
-    sne $s0, $t5, $t4
-    move $t1, $s0
-    li $t3, 1
-    move $t2, $t3
-    sne $s3, $t2, $t1
-    move $t1, $s3
-    beqz $t1 L_ved11
-    li $v1, 0
-    sw $v1, 116($sp)
-    lw $v1, 116($sp)
-    move $v1, $v1
-    sw $v1, 120($sp)
-    lw $v1, 120($sp)
-    move $v1, $v1
-    sw $v1, 156($sp)
-    j L_ved12
+    move $t1, $t6
+    move $t0, $t1
 L_ved11:
-    li $v1, 1
+    beqz $t0 L_ved12
+    li $t5, 0
+    move $t2, $t5
+    move $v1, $t2
+    sw $v1, 132($sp)
+    j L_ved13
+L_ved12:
+    li $t4, 1
+    move $t3, $t4
+    sub $s0, $s3, $t3
+    move $v1, $s0
     sw $v1, 112($sp)
     lw $v1, 112($sp)
-    move $v1, $v1
-    sw $v1, 128($sp)
-    lw $v1, 128($sp)
-    lw $v0, 124($sp)
-    sub $v1, $v0, $v1
-    sw $v1, 108($sp)
-    lw $v1, 108($sp)
-    move $v1, $v1
-    sw $v1, 136($sp)
-    lw $v1, 136($sp)
-    lw $v0, 132($sp)
+    lw $v0, 108($sp)
     sle $v1, $v0, $v1
     sw $v1, 104($sp)
     lw $v1, 104($sp)
     move $v1, $v1
-    sw $v1, 140($sp)
+    sw $v1, 116($sp)
     li $v1, 1
     sw $v1, 100($sp)
     lw $v1, 100($sp)
-    lw $v0, 140($sp)
+    lw $v0, 116($sp)
     sne $v1, $v0, $v1
     sw $v1, 96($sp)
     lw $v1, 96($sp)
     move $v1, $v1
-    sw $v1, 144($sp)
-    lw $v0, 144($sp)
-    beqz $v0 L_ved13
+    sw $v1, 120($sp)
+    lw $v0, 120($sp)
+    beqz $v0 L_ved14
     li $v1, 0
     sw $v1, 92($sp)
     lw $v1, 92($sp)
     move $v1, $v1
-    sw $v1, 148($sp)
-    lw $v1, 148($sp)
+    sw $v1, 124($sp)
+    lw $v1, 124($sp)
     move $v1, $v1
-    sw $v1, 156($sp)
-    j L_ved14
-L_ved13:
+    sw $v1, 132($sp)
+    j L_ved15
+L_ved14:
     li $v1, 1
     sw $v1, 88($sp)
     lw $v1, 88($sp)
     move $v1, $v1
-    sw $v1, 152($sp)
-    lw $v1, 152($sp)
+    sw $v1, 128($sp)
+    lw $v1, 128($sp)
     move $v1, $v1
-    sw $v1, 156($sp)
-L_ved14:
-L_ved12:
-    lw $v1, 156($sp)
+    sw $v1, 132($sp)
+L_ved15:
+L_ved13:
+    lw $v1, 132($sp)
     move $v0, $v1
     lw $s0, 84($sp)
     lw $s1, 80($sp)
@@ -984,7 +968,7 @@ List_ved_Delete:
     sw $fp, -4($sp)
     sw $ra, -8($sp)
     move $fp, $sp
-    subu $sp, $sp, 424
+    subu $sp, $sp, 376
     sw $s0, 84($sp)
     sw $s1, 80($sp)
     sw $s2, 76($sp)
@@ -994,70 +978,52 @@ List_ved_Delete:
     sw $s6, 60($sp)
     sw $s7, 56($sp)
     move $s0, $a0
-    sw $a1, 376($sp)
+    sw $a1, 328($sp)
     move $v1, $s0
-    sw $v1, 404($sp)
-    li $s1, 0
-    move $t1, $s1
+    sw $v1, 356($sp)
+    li $s3, 0
+    move $t1, $s3
     move $v1, $t1
-    sw $v1, 380($sp)
-    li $s4, 0
-    move $t2, $s4
-    li $s3, 1
-    move $t3, $s3
+    sw $v1, 332($sp)
+    li $s1, 0
+    move $t2, $s1
+    li $s4, 1
+    move $t3, $s4
     sub $s5, $t2, $t3
     move $t4, $s5
     move $v1, $t4
-    sw $v1, 400($sp)
+    sw $v1, 352($sp)
     move $v1, $s0
-    sw $v1, 384($sp)
+    sw $v1, 336($sp)
     move $v1, $s0
-    sw $v1, 388($sp)
+    sw $v1, 340($sp)
     lw $t5, 12($s0)
     move $v1, $t5
-    sw $v1, 392($sp)
+    sw $v1, 344($sp)
     lw $t6, 4($s0)
     move $v1, $t6
-    sw $v1, 396($sp)
-L_ved15:
+    sw $v1, 348($sp)
+L_ved16:
     li $s6, 1
-    lw $v0, 392($sp)
+    lw $v0, 344($sp)
     sne $s7, $v0, $s6
     move $t7, $s7
+    move $t8, $t7
+    beqz $t8 L_ved17
     li $t0, 1
-    lw $v0, 380($sp)
+    lw $v0, 332($sp)
     sne $s2, $v0, $t0
-    move $t8, $s2
-    add $t9, $t7, $t8
-    li $v1, 2
-    sw $v1, 220($sp)
-    lw $v1, 220($sp)
-    sne $v1, $t9, $v1
-    sw $v1, 216($sp)
-    lw $v1, 216($sp)
-    move $v1, $v1
-    sw $v1, 224($sp)
-    li $v1, 1
-    sw $v1, 212($sp)
-    lw $v1, 212($sp)
-    move $v1, $v1
-    sw $v1, 204($sp)
-    lw $v1, 224($sp)
-    lw $v0, 204($sp)
-    sne $v1, $v0, $v1
-    sw $v1, 208($sp)
-    lw $v1, 208($sp)
-    move $v1, $v1
-    sw $v1, 224($sp)
-    lw $v0, 224($sp)
-    beqz $v0 L_ved16
-    lw $v1, 376($sp)
+    move $t9, $s2
+    move $t8, $t9
+L_ved17:
+    beqz $t8 L_ved18
+    lw $v1, 328($sp)
     lw $v0, 0($v1)
-    sw $v0, 228($sp)
-    lw $v1, 228($sp)
+    sw $v0, 180($sp)
+    lw $v1, 180($sp)
     lw $v0, 16($v1)
-    sw $v0, 232($sp)
-    lw $v1, 232($sp)
+    sw $v0, 184($sp)
+    lw $v1, 184($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1072,9 +1038,9 @@ L_ved15:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 376($sp)
+    lw $v0, 328($sp)
     move $a0, $v0
-    lw $v0, 396($sp)
+    lw $v0, 348($sp)
     move $a1, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1092,78 +1058,62 @@ L_ved15:
     lw $t8, 4($sp)
     lw $t9, 0($sp)
     move $v1, $v0
-    sw $v1, 200($sp)
-    lw $v1, 200($sp)
+    sw $v1, 176($sp)
+    lw $v1, 176($sp)
     move $v1, $v1
-    sw $v1, 236($sp)
-    lw $v0, 236($sp)
-    beqz $v0 L_ved17
+    sw $v1, 188($sp)
+    lw $v0, 188($sp)
+    beqz $v0 L_ved19
     li $v1, 1
-    sw $v1, 196($sp)
-    lw $v1, 196($sp)
+    sw $v1, 172($sp)
+    lw $v1, 172($sp)
     move $v1, $v1
-    sw $v1, 240($sp)
-    lw $v1, 240($sp)
-    move $v1, $v1
-    sw $v1, 380($sp)
-    li $v1, 0
     sw $v1, 192($sp)
     lw $v1, 192($sp)
     move $v1, $v1
-    sw $v1, 244($sp)
-    lw $v1, 244($sp)
-    lw $v0, 400($sp)
-    sle $v1, $v0, $v1
-    sw $v1, 188($sp)
-    lw $v1, 188($sp)
-    move $v1, $v1
-    sw $v1, 252($sp)
+    sw $v1, 332($sp)
     li $v1, 0
-    sw $v1, 184($sp)
-    lw $v1, 184($sp)
-    move $v1, $v1
-    sw $v1, 248($sp)
-    lw $v1, 248($sp)
-    lw $v0, 400($sp)
-    sne $v1, $v0, $v1
-    sw $v1, 180($sp)
-    lw $v1, 180($sp)
-    move $v1, $v1
-    sw $v1, 256($sp)
-    lw $v1, 256($sp)
-    lw $v0, 252($sp)
-    add $v1, $v0, $v1
-    sw $v1, 176($sp)
-    li $v1, 2
-    sw $v1, 172($sp)
-    lw $v1, 172($sp)
-    lw $v0, 176($sp)
-    sne $v1, $v0, $v1
     sw $v1, 168($sp)
     lw $v1, 168($sp)
     move $v1, $v1
-    sw $v1, 372($sp)
-    li $v1, 1
+    sw $v1, 196($sp)
+    lw $v1, 196($sp)
+    lw $v0, 352($sp)
+    sle $v1, $v0, $v1
     sw $v1, 164($sp)
     lw $v1, 164($sp)
     move $v1, $v1
-    sw $v1, 156($sp)
-    lw $v1, 372($sp)
-    lw $v0, 156($sp)
-    sne $v1, $v0, $v1
+    sw $v1, 200($sp)
+    lw $v1, 200($sp)
+    move $v1, $v1
+    sw $v1, 324($sp)
+    lw $v0, 324($sp)
+    beqz $v0 L_ved20
+    li $v1, 0
     sw $v1, 160($sp)
     lw $v1, 160($sp)
     move $v1, $v1
-    sw $v1, 372($sp)
-    lw $v0, 372($sp)
-    beqz $v0 L_ved18
-    lw $v1, 384($sp)
+    sw $v1, 204($sp)
+    lw $v1, 204($sp)
+    lw $v0, 352($sp)
+    sne $v1, $v0, $v1
+    sw $v1, 156($sp)
+    lw $v1, 156($sp)
+    move $v1, $v1
+    sw $v1, 208($sp)
+    lw $v1, 208($sp)
+    move $v1, $v1
+    sw $v1, 324($sp)
+L_ved20:
+    lw $v0, 324($sp)
+    beqz $v0 L_ved21
+    lw $v1, 336($sp)
     lw $v0, 0($v1)
-    sw $v0, 368($sp)
-    lw $v1, 368($sp)
+    sw $v0, 320($sp)
+    lw $v1, 320($sp)
     lw $v0, 32($v1)
-    sw $v0, 364($sp)
-    lw $v1, 364($sp)
+    sw $v0, 316($sp)
+    lw $v1, 316($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1178,7 +1128,7 @@ L_ved15:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 384($sp)
+    lw $v0, 336($sp)
     move $a0, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1199,30 +1149,30 @@ L_ved15:
     sw $v1, 152($sp)
     lw $v1, 152($sp)
     move $v1, $v1
-    sw $v1, 360($sp)
-    lw $v1, 360($sp)
+    sw $v1, 312($sp)
+    lw $v1, 312($sp)
     move $v1, $v1
-    sw $v1, 404($sp)
-    j L_ved19
-L_ved18:
+    sw $v1, 356($sp)
+    j L_ved22
+L_ved21:
     li $v1, 0
     sw $v1, 148($sp)
     lw $v1, 148($sp)
     move $v1, $v1
-    sw $v1, 356($sp)
+    sw $v1, 308($sp)
     li $v1, 555
     sw $v1, 144($sp)
     lw $v1, 144($sp)
     move $v1, $v1
-    sw $v1, 352($sp)
-    lw $v1, 352($sp)
-    lw $v0, 356($sp)
+    sw $v1, 304($sp)
+    lw $v1, 304($sp)
+    lw $v0, 308($sp)
     sub $v1, $v0, $v1
     sw $v1, 140($sp)
     lw $v1, 140($sp)
     move $v1, $v1
-    sw $v1, 348($sp)
-    lw $v1, 348($sp)
+    sw $v1, 300($sp)
+    lw $v1, 300($sp)
     sw $a0, -12($fp)
     sw $v0, -16($fp)
     add $a0, $0, $v1
@@ -1233,13 +1183,13 @@ L_ved18:
     syscall
     lw $a0, -12($fp)
     lw $v0, -16($fp)
-    lw $v1, 384($sp)
+    lw $v1, 336($sp)
     lw $v0, 0($v1)
-    sw $v0, 344($sp)
-    lw $v1, 344($sp)
+    sw $v0, 296($sp)
+    lw $v1, 296($sp)
     lw $v0, 32($v1)
-    sw $v0, 340($sp)
-    lw $v1, 340($sp)
+    sw $v0, 292($sp)
+    lw $v1, 292($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1254,7 +1204,7 @@ L_ved18:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 384($sp)
+    lw $v0, 336($sp)
     move $a0, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1275,14 +1225,14 @@ L_ved18:
     sw $v1, 136($sp)
     lw $v1, 136($sp)
     move $v1, $v1
-    sw $v1, 336($sp)
-    lw $v1, 388($sp)
+    sw $v1, 288($sp)
+    lw $v1, 340($sp)
     lw $v0, 0($v1)
-    sw $v0, 332($sp)
-    lw $v1, 332($sp)
+    sw $v0, 284($sp)
+    lw $v1, 284($sp)
     lw $v0, 12($v1)
-    sw $v0, 328($sp)
-    lw $v1, 328($sp)
+    sw $v0, 280($sp)
+    lw $v1, 280($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1297,9 +1247,9 @@ L_ved18:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 388($sp)
+    lw $v0, 340($sp)
     move $a0, $v0
-    lw $v0, 336($sp)
+    lw $v0, 288($sp)
     move $a1, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1320,26 +1270,26 @@ L_ved18:
     sw $v1, 132($sp)
     lw $v1, 132($sp)
     move $v1, $v1
-    sw $v1, 324($sp)
-    lw $v1, 324($sp)
+    sw $v1, 276($sp)
+    lw $v1, 276($sp)
     li $v1, 0
     sw $v1, 128($sp)
     lw $v1, 128($sp)
     move $v1, $v1
-    sw $v1, 320($sp)
+    sw $v1, 272($sp)
     li $v1, 555
     sw $v1, 124($sp)
     lw $v1, 124($sp)
     move $v1, $v1
-    sw $v1, 316($sp)
-    lw $v1, 316($sp)
-    lw $v0, 320($sp)
+    sw $v1, 268($sp)
+    lw $v1, 268($sp)
+    lw $v0, 272($sp)
     sub $v1, $v0, $v1
     sw $v1, 120($sp)
     lw $v1, 120($sp)
     move $v1, $v1
-    sw $v1, 312($sp)
-    lw $v1, 312($sp)
+    sw $v1, 264($sp)
+    lw $v1, 264($sp)
     sw $a0, -12($fp)
     sw $v0, -16($fp)
     add $a0, $0, $v1
@@ -1350,37 +1300,37 @@ L_ved18:
     syscall
     lw $a0, -12($fp)
     lw $v0, -16($fp)
+L_ved22:
+    j L_ved23
 L_ved19:
-    j L_ved20
-L_ved17:
     li $v1, 0
     sw $v1, 116($sp)
     lw $v1, 116($sp)
     move $v1, $v1
-    sw $v1, 308($sp)
-    lw $v1, 308($sp)
-L_ved20:
+    sw $v1, 260($sp)
+    lw $v1, 260($sp)
+L_ved23:
     li $v1, 1
     sw $v1, 112($sp)
     lw $v1, 112($sp)
-    lw $v0, 380($sp)
+    lw $v0, 332($sp)
     sne $v1, $v0, $v1
     sw $v1, 108($sp)
     lw $v1, 108($sp)
     move $v1, $v1
-    sw $v1, 304($sp)
-    lw $v0, 304($sp)
-    beqz $v0 L_ved21
-    lw $v1, 384($sp)
+    sw $v1, 256($sp)
+    lw $v0, 256($sp)
+    beqz $v0 L_ved24
+    lw $v1, 336($sp)
     move $v1, $v1
-    sw $v1, 388($sp)
-    lw $v1, 384($sp)
+    sw $v1, 340($sp)
+    lw $v1, 336($sp)
     lw $v0, 0($v1)
-    sw $v0, 300($sp)
-    lw $v1, 300($sp)
+    sw $v0, 252($sp)
+    lw $v1, 252($sp)
     lw $v0, 32($v1)
-    sw $v0, 296($sp)
-    lw $v1, 296($sp)
+    sw $v0, 248($sp)
+    lw $v1, 248($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1395,7 +1345,7 @@ L_ved20:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 384($sp)
+    lw $v0, 336($sp)
     move $a0, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1416,17 +1366,17 @@ L_ved20:
     sw $v1, 104($sp)
     lw $v1, 104($sp)
     move $v1, $v1
-    sw $v1, 292($sp)
-    lw $v1, 292($sp)
+    sw $v1, 244($sp)
+    lw $v1, 244($sp)
     move $v1, $v1
-    sw $v1, 384($sp)
-    lw $v1, 384($sp)
+    sw $v1, 336($sp)
+    lw $v1, 336($sp)
     lw $v0, 0($v1)
-    sw $v0, 288($sp)
-    lw $v1, 288($sp)
+    sw $v0, 240($sp)
+    lw $v1, 240($sp)
     lw $v0, 24($v1)
-    sw $v0, 284($sp)
-    lw $v1, 284($sp)
+    sw $v0, 236($sp)
+    lw $v1, 236($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1441,7 +1391,7 @@ L_ved20:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 384($sp)
+    lw $v0, 336($sp)
     move $a0, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1462,17 +1412,17 @@ L_ved20:
     sw $v1, 100($sp)
     lw $v1, 100($sp)
     move $v1, $v1
-    sw $v1, 280($sp)
-    lw $v1, 280($sp)
+    sw $v1, 232($sp)
+    lw $v1, 232($sp)
     move $v1, $v1
-    sw $v1, 392($sp)
-    lw $v1, 384($sp)
+    sw $v1, 344($sp)
+    lw $v1, 336($sp)
     lw $v0, 0($v1)
-    sw $v0, 276($sp)
-    lw $v1, 276($sp)
+    sw $v0, 228($sp)
+    lw $v1, 228($sp)
     lw $v0, 28($v1)
-    sw $v0, 272($sp)
-    lw $v1, 272($sp)
+    sw $v0, 224($sp)
+    lw $v1, 224($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -1487,7 +1437,7 @@ L_ved20:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 384($sp)
+    lw $v0, 336($sp)
     move $a0, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -1508,30 +1458,30 @@ L_ved20:
     sw $v1, 96($sp)
     lw $v1, 96($sp)
     move $v1, $v1
-    sw $v1, 268($sp)
-    lw $v1, 268($sp)
+    sw $v1, 220($sp)
+    lw $v1, 220($sp)
     move $v1, $v1
-    sw $v1, 396($sp)
+    sw $v1, 348($sp)
     li $v1, 1
     sw $v1, 92($sp)
     lw $v1, 92($sp)
     move $v1, $v1
-    sw $v1, 264($sp)
-    lw $v1, 264($sp)
+    sw $v1, 216($sp)
+    lw $v1, 216($sp)
     move $v1, $v1
-    sw $v1, 400($sp)
-    j L_ved22
-L_ved21:
+    sw $v1, 352($sp)
+    j L_ved25
+L_ved24:
     li $v1, 0
     sw $v1, 88($sp)
     lw $v1, 88($sp)
     move $v1, $v1
-    sw $v1, 260($sp)
-    lw $v1, 260($sp)
-L_ved22:
-    j L_ved15
-L_ved16:
-    lw $v1, 404($sp)
+    sw $v1, 212($sp)
+    lw $v1, 212($sp)
+L_ved25:
+    j L_ved16
+L_ved18:
+    lw $v1, 356($sp)
     move $v0, $v1
     lw $s0, 84($sp)
     lw $s1, 80($sp)
@@ -1576,12 +1526,12 @@ List_ved_Search:
     lw $t0, 4($s0)
     move $v1, $t0
     sw $v1, 136($sp)
-L_ved23:
+L_ved26:
     li $s3, 1
     lw $v0, 140($sp)
     sne $s4, $v0, $s3
     move $t1, $s4
-    beqz $t1 L_ved24
+    beqz $t1 L_ved27
     lw $v1, 128($sp)
     lw $t2, 0($v1)
     lw $t3, 16($t2)
@@ -1620,16 +1570,16 @@ L_ved23:
     lw $t9, 0($sp)
     move $s5, $v0
     move $t4, $s5
-    beqz $t4 L_ved25
+    beqz $t4 L_ved28
     li $s2, 1
     move $t5, $s2
     move $v1, $t5
     sw $v1, 144($sp)
-    j L_ved26
-L_ved25:
+    j L_ved29
+L_ved28:
     li $t9, 0
     move $t6, $t9
-L_ved26:
+L_ved29:
     lw $v1, 132($sp)
     lw $t7, 0($v1)
     lw $t8, 32($t7)
@@ -1764,8 +1714,8 @@ L_ved26:
     lw $v1, 124($sp)
     move $v1, $v1
     sw $v1, 136($sp)
-    j L_ved23
-L_ved24:
+    j L_ved26
+L_ved27:
     lw $v1, 144($sp)
     move $v0, $v1
     lw $s0, 84($sp)
@@ -1902,12 +1852,12 @@ List_ved_Print:
     lw $s5, 4($s0)
     move $v1, $s5
     sw $v1, 120($sp)
-L_ved27:
+L_ved30:
     li $s2, 1
     lw $v0, 112($sp)
     sne $s1, $v0, $s2
     move $s6, $s1
-    beqz $s6 L_ved28
+    beqz $s6 L_ved31
     lw $v1, 120($sp)
     lw $s7, 0($v1)
     lw $t0, 4($s7)
@@ -2076,8 +2026,8 @@ L_ved27:
     lw $v1, 104($sp)
     move $v1, $v1
     sw $v1, 120($sp)
-    j L_ved27
-L_ved28:
+    j L_ved30
+L_ved31:
     li $v1, 1
     sw $v1, 88($sp)
     lw $v1, 88($sp)

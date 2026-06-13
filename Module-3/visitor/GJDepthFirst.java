@@ -899,17 +899,17 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
     * f1 -> "&&"
     * f2 -> PrimaryExpression()
     */
+   // Short-circuit: the right operand is evaluated only if the left one is true.
    public R visit(AndExpression n, A argu) {
-      R _ret=null;
       String exp1 = (String) n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      String exp2 = (String) n.f2.accept(this, argu);
-
       int t1 = get_free_temp();
-      println(curr_tab_space() + "MOVE TEMP " + t1 + " NE PLUS " + exp1 + " " + exp2 + " 2");
-      println(curr_tab_space() + "MOVE TEMP " + t1 + " NE 1 TEMP " + t1);
-      _ret = (R) ("TEMP " + t1);
-      return _ret;
+      String done = get_free_label();
+      println(curr_tab_space() + "MOVE TEMP " + t1 + " " + exp1);
+      println(curr_tab_space() + "CJUMP TEMP " + t1 + " " + done);
+      String exp2 = (String) n.f2.accept(this, argu);
+      println(curr_tab_space() + "MOVE TEMP " + t1 + " " + exp2);
+      println(done + " NOOP");
+      return (R) ("TEMP " + t1);
    }
 
    /**
@@ -917,16 +917,20 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
     * f1 -> "||"
     * f2 -> PrimaryExpression()
     */
+   // Short-circuit: the right operand is evaluated only if the left one is false.
    public R visit(OrExpression n, A argu) {
-      R _ret=null;
       String exp1 = (String) n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      String exp2 = (String) n.f2.accept(this, argu);
-
       int t1 = get_free_temp();
-      println(curr_tab_space() + "MOVE TEMP " + t1 + " NE PLUS " + exp1 + " " + exp2 + " 0");
-      _ret = (R) ("TEMP " + t1);
-      return _ret;
+      String right = get_free_label();
+      String done = get_free_label();
+      println(curr_tab_space() + "MOVE TEMP " + t1 + " " + exp1);
+      println(curr_tab_space() + "CJUMP TEMP " + t1 + " " + right);
+      println(curr_tab_space() + "JUMP " + done);
+      println(right + " NOOP");
+      String exp2 = (String) n.f2.accept(this, argu);
+      println(curr_tab_space() + "MOVE TEMP " + t1 + " " + exp2);
+      println(done + " NOOP");
+      return (R) ("TEMP " + t1);
    }
 
    /**

@@ -91,7 +91,7 @@ Fac_ved_ComputeFac:
     sw $fp, -4($sp)
     sw $ra, -8($sp)
     move $fp, $sp
-    subu $sp, $sp, 168
+    subu $sp, $sp, 144
     sw $s0, 84($sp)
     sw $s1, 80($sp)
     sw $s2, 76($sp)
@@ -100,62 +100,46 @@ Fac_ved_ComputeFac:
     sw $s5, 64($sp)
     sw $s6, 60($sp)
     sw $s7, 56($sp)
-    sw $a0, 124($sp)
-    sw $a1, 136($sp)
+    sw $a0, 100($sp)
+    sw $a1, 112($sp)
     li $t9, 1
     move $s3, $t9
-    lw $v0, 136($sp)
+    lw $v0, 112($sp)
     sle $s2, $v0, $s3
     move $s4, $s2
+    move $s5, $s4
+    beqz $s5 L_ved1
     li $t8, 1
-    move $s5, $t8
-    lw $v0, 136($sp)
-    sne $t7, $v0, $s5
-    move $s6, $t7
-    add $s1, $s4, $s6
-    li $t6, 2
-    sne $t4, $s1, $t6
-    move $s7, $t4
+    move $s6, $t8
+    lw $v0, 112($sp)
+    sne $t7, $v0, $s6
+    move $s7, $t7
+    move $s5, $s7
+L_ved1:
+    beqz $s5 L_ved2
+    li $s1, 1
+    move $t0, $s1
+    li $t6, 0
+    move $t1, $t6
+    add $t4, $t0, $t1
+    move $t2, $t4
+    move $v1, $t2
+    sw $v1, 124($sp)
+    j L_ved3
+L_ved2:
     li $s0, 1
     move $t3, $s0
-    sne $t5, $t3, $s7
-    move $s7, $t5
-    beqz $s7 L_ved1
-    li $t2, 1
-    move $t0, $t2
-    li $t1, 0
-    move $v1, $t1
-    sw $v1, 108($sp)
-    lw $v1, 108($sp)
-    add $v1, $t0, $v1
+    lw $v0, 112($sp)
+    sub $t5, $v0, $t3
+    move $v1, $t5
     sw $v1, 104($sp)
-    lw $v1, 104($sp)
-    move $v1, $v1
-    sw $v1, 112($sp)
-    lw $v1, 112($sp)
-    move $v1, $v1
-    sw $v1, 148($sp)
-    j L_ved2
-L_ved1:
-    li $v1, 1
-    sw $v1, 100($sp)
     lw $v1, 100($sp)
-    move $v1, $v1
-    sw $v1, 116($sp)
-    lw $v1, 116($sp)
-    lw $v0, 136($sp)
-    sub $v1, $v0, $v1
-    sw $v1, 96($sp)
+    lw $v0, 0($v1)
+    sw $v0, 96($sp)
     lw $v1, 96($sp)
-    move $v1, $v1
-    sw $v1, 128($sp)
-    lw $v1, 124($sp)
     lw $v0, 0($v1)
-    sw $v0, 120($sp)
-    lw $v1, 120($sp)
-    lw $v0, 0($v1)
-    sw $v0, 132($sp)
-    lw $v1, 132($sp)
+    sw $v0, 108($sp)
+    lw $v1, 108($sp)
     sw $a0, 52($sp)
     sw $a1, 48($sp)
     sw $a2, 44($sp)
@@ -170,9 +154,9 @@ L_ved1:
     sw $t7, 8($sp)
     sw $t8, 4($sp)
     sw $t9, 0($sp)
-    lw $v0, 124($sp)
+    lw $v0, 100($sp)
     move $a0, $v0
-    lw $v0, 128($sp)
+    lw $v0, 104($sp)
     move $a1, $v0
     jalr $v1
     lw $a0, 52($sp)
@@ -193,20 +177,20 @@ L_ved1:
     sw $v1, 92($sp)
     lw $v1, 92($sp)
     move $v1, $v1
-    sw $v1, 140($sp)
-    lw $v1, 140($sp)
-    lw $v0, 136($sp)
+    sw $v1, 116($sp)
+    lw $v1, 116($sp)
+    lw $v0, 112($sp)
     mult $v0, $v1
     mflo $v1
     sw $v1, 88($sp)
     lw $v1, 88($sp)
     move $v1, $v1
-    sw $v1, 144($sp)
-    lw $v1, 144($sp)
+    sw $v1, 120($sp)
+    lw $v1, 120($sp)
     move $v1, $v1
-    sw $v1, 148($sp)
-L_ved2:
-    lw $v1, 148($sp)
+    sw $v1, 124($sp)
+L_ved3:
+    lw $v1, 124($sp)
     move $v0, $v1
     lw $s0, 84($sp)
     lw $s1, 80($sp)
