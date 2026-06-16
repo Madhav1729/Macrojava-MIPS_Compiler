@@ -28,7 +28,7 @@ OPT_PASSES := 7 8 9 10 11
 pass_src    = Module-$(1)$(if $(filter $(1),$(OPT_PASSES)),:$(OPT_COMMON))
 pass_deps   = $(shell find Module-$(1) $(if $(filter $(1),$(OPT_PASSES)),$(OPT_COMMON)) -name '*.java')
 
-.PHONY: all test install uninstall clean
+.PHONY: all test test-opt install uninstall clean
 
 all: $(LAUNCHER) $(DRIVER) $(PASS_JARS) $(PP)
 
@@ -65,6 +65,10 @@ $(LAUNCHER): driver/mjc
 
 test: all
 	tests/run_tests.sh
+	tests/run_opt_tests.sh
+
+test-opt: all
+	tests/run_opt_tests.sh
 
 install: all
 	install -d $(DESTDIR)$(PREFIX)/bin $(DESTDIR)$(PREFIX)/lib/mjc/passes $(DESTDIR)$(PREFIX)/libexec/mjc
