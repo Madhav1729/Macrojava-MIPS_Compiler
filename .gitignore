@@ -1,0 +1,16 @@
+# P1
+*/outputs/
+*/outputs2/
+*/testcases/
+*/outputs_final/
+*/outputs_java/
+*/testcases_java/
+*/final_tcs
+*/final_tc_eoutputs
+*.out
+*.sh
+!/*.sh
+*.cpp
+*.class
+*.jar
+.vscode/
