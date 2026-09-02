@@ -1,4 +1,4 @@
-# Compiler-Design-Lab
+# MacroJava Compiler
 
 Writing a compiler for a subset of java, divided into various lab exercises/stages as part of CS3310 Course at IIT Madras.
 
